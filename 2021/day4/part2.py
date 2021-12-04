@@ -25,14 +25,15 @@ class Table:
             for cell in row:
                 rowLength -= int(bin(cell.marked), 2)
             if rowLength == 0:
-                raise True
+                return True
+
         for index in range(len(self.values[0])):
             columnLength = len(self.values[0])
             for row in self.values:
                 cell = row[index]
                 columnLength -= int(bin(cell.marked), 2)
             if columnLength == 0:
-                raise True
+                return True
         return False
 
     def getUnmarked(self):
@@ -58,10 +59,16 @@ class Main:
         for i in range(len(numbers)):
             numbers[i] = int(numbers[i])
         for number in numbers:
-            for table in self.tables:
+            deleted = 0
+            for i in range(len(self.tables)):
+                table = self.tables[len(self.tables) - i - 1 + deleted]
                 table.markCell(number)
                 if table.isWinner():
-                    print(int(table.getUnmarked()) * number)
+                    if len(self.tables) > 1:
+                        self.tables.remove(table)
+                        deleted += 1
+                        continue
+                    print(table.getUnmarked() * number)
                     return
 
 
